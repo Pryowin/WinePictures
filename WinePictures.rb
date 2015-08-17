@@ -7,26 +7,35 @@ module WinePictures
     
     PATH_NAME = "D:\\Users\\David\\Workspace\\WinePictures\\"
     FILE_NAME = "export-bottles-stored.csv"
+    @lastBottle = String.new()
     
     def readFile
       fqn = PATH_NAME + FILE_NAME
       i=0
-      winery =Array.new
-      name = Array.new
+      bottleDesc = Array.new()
       
-      CSV.foreach(fqn,  encoding: "bom|UTF-8", :row_sep => :auto, :headers => true) do |bottle|
-          winery[i] = bottle['Winery']
-          name [i] = bottle ['Name']   
+      CSV.foreach(fqn,  encoding: "bom|UTF-8", :row_sep => :auto, :headers => true) do |bottle|   
+          bottleDesc[i] = "#{bottle['Winery']} #{bottle['Name']} label"
           i += 1
       end
-     return winery,name
+     return bottleDesc
     end
     
-   
-     
+    def isNewBottle(bottle)
+      if bottle == @lastBottle
+           return false
+      end
+      
+      @lastBottle = bottle
+      return true
+    end
   end
   
+  
   wf = WineFile.new
-  wf.readFile()
+  searchString = wf.readFile()
+  
+  searchString.sort!
+  puts searchString[30]
   
 end
