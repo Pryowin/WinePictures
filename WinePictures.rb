@@ -1,13 +1,16 @@
 require 'google-search'
 require 'csv.rb'
+require 'FileNameUtils.rb' 
 
 module WinePictures
   
   class WineFile
     
-    PATH_NAME = "D:\\Users\\David\\Workspace\\WinePictures\\"
+    PATH_NAME = "D:/Users/David/Workspace/WinePictures/"
     FILE_NAME = "export-bottles-stored.csv"
+   
     @lastBottle = String.new()
+    @fnu = FileNameUtils::FileNameUtils.new()
     
     def readFile
       fqn = PATH_NAME + FILE_NAME
@@ -25,12 +28,31 @@ module WinePictures
       if bottle == @lastBottle
            return false
       end
-      
-      @lastBottle = bottle
+      @lastBottle = bottle   
       return true
     end
   end
   
+  class BottleName
+    
+    def initialize(name)
+      @searchName = name
+      @fileRoot = name.to_s.gsub(" ","_")
+    end
+    
+    def searchName
+      return @searchName
+    end
+    
+    def fileRoot
+      return @fileRoot
+    end
+      
+    def fileName (ext)
+      return fileRoot + "." + ext
+    end
+    
+  end
   
   wf = WineFile.new
   searchString = wf.readFile()
